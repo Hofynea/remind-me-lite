@@ -13,27 +13,28 @@ def index():
 def add_reminder():
     recipient = request.form.get('recipient')
     message = request.form.get('message')
-    send_time = request.form.get('send_time')
+    send_time_str = request.form.get('send_time')
     method = request.form.get('method')
 
-    if not recipient or not message or not send_time or not method:
-        flash("All fields are required!", "error")
+    if not all([recipient, message, send_time_str, method]):
+        flash("All fields are required.", "error")
         return redirect(url_for('main.index'))
 
     try:
-        send_time = datetime.strptime(send_time, "%Y-%m-%dT%H:%M")
+        send_time = datetime.fromisoformat(send_time_str)
     except ValueError:
-        flash("Invalid date/time format", "error")
+        flash("Invalid date/time format.", "error")
         return redirect(url_for('main.index'))
 
     reminder = Reminder(
         recipient=recipient,
         message=message,
         send_time=send_time,
-        method=method
+        method=method,
+        sent=False
     )
     db.session.add(reminder)
     db.session.commit()
 
-    flash("Reminder added!", "success")
+    flash("Reminder added successfully!", "success")
     return redirect(url_for('main.index'))
