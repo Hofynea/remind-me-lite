@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remind Me Lite</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    h1 { color: #333; }
+    form, .reminders { margin-top: 20px; }
+    label { display: block; margin-top: 10px; }
+    input, textarea, select {
+      width: 300px;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button { margin-top: 15px; padding: 10px 15px; }
+    .reminder {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f0f0f0;
+      border-radius: 5px;
+    }
+    .flash-message { margin-top: 10px; }
+    .flash-success { color: green; }
+    .flash-error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Remind Me Lite</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-message">
+        {% for category, message in messages %}
+          <div class="flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('main.add_reminder') }}">
+    <label for="recipient">Recipient (email or phone):</label>
+    <input type="text" name="recipient" id="recipient" required />
+
+    <label for="message">Message:</label>
+    <textarea name="message" id="message" rows="3" required></textarea>
+
+    <label for="send_time">Send Time:</label>
+    <input type="datetime-local" name="send_time" id="send_time" required />
+
+    <label for="method">Method:</label>
+    <select name="method" id="method" required>
+      <option value="email">Email</option>
+      <option value="sms">SMS</option>
+    </select>
+
+    <button type="submit">Add Reminder</button>
+  </form>
+
+  <div class="reminders">
+    <h2>Scheduled Reminders</h2>
+    {% for reminder in reminders %}
+      <div class="reminder">
+        <strong>To:</strong> {{ reminder.recipient }}<br />
+        <strong>When:</strong> {{ reminder.send_time }}<br />
+        <strong>Method:</strong> {{ reminder.method }}<br />
+        <strong>Message:</strong> {{ reminder.message }}<br />
+        <strong>Status:</strong> {{ "Sent" if reminder.sent else "Pending" }}
+      </div>
+    {% else %}
+      <p>No reminders yet.</p>
+    {% endfor %}
+  </div>
+</body>
+</html>
