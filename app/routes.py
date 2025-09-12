@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import db, Reminder
 from datetime import datetime
+from .utils import send_email_reminder
+import os
 
 main = Blueprint('main', __name__)
 
@@ -38,3 +40,17 @@ def add_reminder():
 
     flash("Reminder added successfully!", "success")
     return redirect(url_for('main.index'))
+
+# TEMPORARY: Test route to verify SMTP setup
+@main.route('/test-email')
+def test_email():
+    to_email = os.getenv("TEST_EMAIL")
+    if not to_email:
+        return "No TEST_EMAIL found in environment variables."
+
+    send_email_reminder(
+        to_email=to_email,
+        subject="Reminder Test Email",
+        body="If you're reading this, your Gmail SMTP setup works perfectly!"
+    )
+    return "Test email sent!"
