@@ -5,7 +5,7 @@ app = create_app()
 
 # Testind to send an email
 send_email_reminder(
-    to_email="yourtestemail@gmail.com",
+    to_email="ads959039@gmail.com",
     subject="Reminder Test",
     body="If you're seeing this, your reminder app works!"
 )
