@@ -88,6 +88,8 @@
       </select>
     </div>
 
+    <input type="hidden" name="timezone_offset_minutes" id="timezone_offset_minutes" />
+
     <div class="text-center">
       <button type="submit" class="btn btn-primary">Add Reminder</button>
     </div>
@@ -113,5 +115,12 @@
       <p class="text-muted text-center">No reminders yet.</p>
     {% endif %}
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const offsetInMinutes = new Date().getTimezoneOffset();
+      document.getElementById('timezone_offset_minutes').value = offsetInMinutes;
+    });
+  </script>
 </body>
 </html>
