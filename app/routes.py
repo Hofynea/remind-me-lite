@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import db, Reminder
-from datetime import datetime
+from datetime import datetime, timedelta
 from .utils import send_email_reminder
 import os
 
@@ -17,13 +17,16 @@ def add_reminder():
     message = request.form.get('message')
     send_time_str = request.form.get('send_time')
     method = request.form.get('method')
+    offset_str = request.form.get('timezone_offset_minutes', '0')
 
     if not all([recipient, message, send_time_str, method]):
         flash("All fields are required.", "error")
         return redirect(url_for('main.index'))
 
     try:
-        send_time = datetime.fromisoformat(send_time_str)
+        offset_minutes = int(offset_str)
+        local_time = datetime.fromisoformat(send_time_str)
+        send_time_utc = local_time - timedelta(minutes=offset_minutes)
     except ValueError:
         flash("Invalid date/time format.", "error")
         return redirect(url_for('main.index'))
@@ -31,7 +34,7 @@ def add_reminder():
     reminder = Reminder(
         recipient=recipient,
         message=message,
-        send_time=send_time,
+        send_time=send_time_utc,
         method=method,
         sent=False
     )
