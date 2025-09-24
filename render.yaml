@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: remind-me-lite
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+
+      - key: SECRET_KEY
+        generateValue: true
+
+      - key: TEST_EMAIL
+        value: test@example.com
+
+      - key: MAIL_USERNAME
+        value: placeholder@example.com
+        
+      - key: MAIL_PASSWORD
+        generateValue: true
