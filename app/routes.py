@@ -26,7 +26,7 @@ def add_reminder():
     try:
         offset_minutes = int(offset_str)
         local_time = datetime.fromisoformat(send_time_str)
-        send_time_utc = local_time + timedelta(minutes=offset_minutes)
+        send_time_utc = local_time - timedelta(minutes=offset_minutes)
     except ValueError:
         flash("Invalid date/time format.", "error")
         return redirect(url_for('main.index'))
