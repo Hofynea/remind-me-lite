@@ -18,7 +18,7 @@ Ideal for personal productivity, small teams, solo founders, or client-facing us
 ## Demo
 
 🚀 **Live App**  
-👉 [Remind Me Lite on Render →](https://)
+👉 [Remind Me Lite on Render →](https://remind-me-lite.onrender.com)
 
 ### 1. Add a Reminder
 
